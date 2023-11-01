@@ -3,7 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Todo List</title>
+    <title>MoreDo - Your ToDo List</title>
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <header id="app-header">
+        <button class="header-button">
+          <span class="material-symbols-rounded"> home </span>
+        </button>
+        <form class="search-form" action="#">
+          <button type="submit" class="header-button">
+            <span class="material-symbols-rounded"> search </span>
+          </button>
+          <input type="search" placeholder="Search" />
+        </form>
+        <button class="header-button">
+          <span class="button-text">New Project</span>
+          <span class="material-symbols-rounded"> add </span>
+        </button>
+        <button class="header-button">
+          <span class="material-symbols-rounded"> notifications </span>
+        </button>
+        <button class="header-button">
+          <span class="material-symbols-rounded"> account_circle </span>
+        </button>
+      </header>
+      <nav id="app-menu">
+        <div class="general-categories">
+          <div class="nav-section">
+            <button class="nav-button" id="all-projects-btn">
+              <span class="material-symbols-rounded button-icon">
+                all_inbox
+              </span>
+              <span class="button-text">All Projects</span>
+            </button>
+          </div>
+          <div class="nav-section">
+            <button class="nav-button" id="today-btn">
+              <span class="material-symbols-rounded button-icon"> today </span>
+              <span class="button-text">Today</span>
+            </button>
+            <button class="nav-button" id="upcoming-btn">
+              <span class="material-symbols-rounded button-icon">
+                upcoming
+              </span>
+              <span class="button-text">Upcoming</span>
+            </button>
+            <button class="nav-button" id="someday-btn">
+              <span class="material-symbols-rounded button-icon">
+                date_range
+              </span>
+              <span class="button-text">Someday</span>
+            </button>
+          </div>
+        </div>
+        <div class="custom-categories" id="workspaces"></div>
+        <button class="nav-button">
+          <span class="material-symbols-rounded button-icon"> add </span>
+          <span class="button-text">New List</span>
+        </button>
+      </nav>
+      <main id="app-content"></main>
+    </div>
+  </body>
 </html>
