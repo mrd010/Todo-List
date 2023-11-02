@@ -3,67 +3,87 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MoreDo - Your ToDo List</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
   <body>
-    <div class="container">
-      <header id="app-header">
-        <button class="header-button">
-          <span class="material-symbols-rounded"> home </span>
+    <header class="app-fixed-header">
+      <button class="short-button">
+        <span class="material-symbols-rounded button-icon"> home </span>
+      </button>
+      <form class="input-field" action="#">
+        <button type="submit" class="short-button field-button">
+          <span class="material-symbols-rounded button-icon"> search </span>
         </button>
-        <form class="search-form" action="#">
-          <button type="submit" class="header-button">
-            <span class="material-symbols-rounded"> search </span>
+        <input type="search" class="text-input" placeholder="Search" />
+      </form>
+      <button class="long-button">
+        <span class="button-text">New Project </span>
+        <span class="material-symbols-rounded button-icon"> add </span>
+      </button>
+      <button class="short-button">
+        <span class="material-symbols-rounded button-icon">
+          notifications
+        </span>
+      </button>
+      <button class="short-button">
+        <span class="material-symbols-rounded button-icon">
+          account_circle
+        </span>
+      </button>
+    </header>
+    <nav class="app-fixed-side">
+      <section class="general-categories">
+        <div class="category-section">
+          <button class="long-button">
+            <span
+              class="material-symbols-rounded button-icon"
+              style="color: #0284c7"
+            >
+              all_inbox
+            </span>
+            <span class="button-text">All Projects</span>
+            <span class="notifier">2</span>
           </button>
-          <input type="search" placeholder="Search" />
-        </form>
-        <button class="header-button">
-          <span class="button-text">New Project</span>
-          <span class="material-symbols-rounded"> add </span>
-        </button>
-        <button class="header-button">
-          <span class="material-symbols-rounded"> notifications </span>
-        </button>
-        <button class="header-button">
-          <span class="material-symbols-rounded"> account_circle </span>
-        </button>
-      </header>
-      <nav id="app-menu">
-        <div class="general-categories">
-          <div class="nav-section">
-            <button class="nav-button" id="all-projects-btn">
-              <span class="material-symbols-rounded button-icon">
-                all_inbox
-              </span>
-              <span class="button-text">All Projects</span>
-            </button>
-          </div>
-          <div class="nav-section">
-            <button class="nav-button" id="today-btn">
-              <span class="material-symbols-rounded button-icon"> today </span>
-              <span class="button-text">Today</span>
-            </button>
-            <button class="nav-button" id="upcoming-btn">
-              <span class="material-symbols-rounded button-icon">
-                upcoming
-              </span>
-              <span class="button-text">Upcoming</span>
-            </button>
-            <button class="nav-button" id="someday-btn">
-              <span class="material-symbols-rounded button-icon">
-                date_range
-              </span>
-              <span class="button-text">Someday</span>
-            </button>
-          </div>
         </div>
-        <div class="custom-categories" id="workspaces"></div>
-        <button class="nav-button">
+        <div class="category-section">
+          <button class="long-button">
+            <span
+              class="material-symbols-rounded button-icon"
+              style="color: #059669"
+            >
+              today
+            </span>
+            <span class="button-text">Today</span>
+            <span class="notifier"></span>
+          </button>
+          <button class="long-button">
+            <span
+              class="material-symbols-rounded button-icon"
+              style="color: #9333ea"
+            >
+              event_upcoming
+            </span>
+            <span class="button-text">Upcoming</span>
+          </button>
+          <button class="long-button">
+            <span
+              class="material-symbols-rounded button-icon"
+              style="color: #d97706"
+            >
+              date_range
+            </span>
+            <span class="button-text">Any Day</span>
+          </button>
+        </div>
+      </section>
+      <section class="custom-categories" id="workspaces"></section>
+      <section class="bottom-menu">
+        <button class="long-button">
           <span class="material-symbols-rounded button-icon"> add </span>
           <span class="button-text">New List</span>
         </button>
-      </nav>
-      <main id="app-content"></main>
-    </div>
+      </section>
+    </nav>
+    <main id="app-content"></main>
   </body>
 </html>
