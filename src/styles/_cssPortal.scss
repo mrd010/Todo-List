@@ -1,0 +1,5 @@
+@use "./variables" as *;
+
+%box-shadow {
+  box-shadow: 0px 0px 5px 0px rgba($theme, 0.8);
+}
