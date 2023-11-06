@@ -1,14 +1,12 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-// const BundleAnalyzerPlugin =
-//   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 
 module.exports = {
   entry: {
     app: path.resolve(__dirname, "../src/index.js"),
   },
   output: {
-    path: path.resolve(__dirname, "../dist"),
+    path: path.join(__dirname, "../dist"),
     filename: "[name][contenthash].js",
     clean: true,
     assetModuleFilename: "[name][ext]",
@@ -17,19 +15,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.scss$/,
+        test: /\.scss$/i,
         use: ["style-loader", "css-loader", "sass-loader"],
       },
-      //   {
-      //     test: /\.js$/,
-      //     exclude: /node_modules/,
-      //     use: {
-      //       loader: "babel-loader",
-      //       options: {
-      //         presets: ["@babel/preset-env"],
-      //       },
-      //     },
-      //   },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
+      },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: "asset/resource",
@@ -42,10 +34,9 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Webpack App",
+      title: "ToDoMore",
       filename: "index.html",
       template: "src/index.html",
     }),
-    // new BundleAnalyzerPlugin(),
   ],
 };

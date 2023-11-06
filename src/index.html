@@ -32,53 +32,57 @@
       </button>
     </header>
     <nav class="app-fixed-side">
-      <section class="general-categories">
-        <div class="category-section">
-          <button class="long-button">
-            <span
-              class="material-symbols-rounded button-icon"
-              style="color: #0284c7"
-            >
-              all_inbox
-            </span>
-            <span class="button-text">All Projects</span>
-            <span class="notifier">2</span>
-          </button>
-        </div>
-        <div class="category-section">
-          <button class="long-button">
-            <span
-              class="material-symbols-rounded button-icon"
-              style="color: #059669"
-            >
-              today
-            </span>
-            <span class="button-text">Today</span>
-            <span class="notifier"></span>
-          </button>
-          <button class="long-button">
-            <span
-              class="material-symbols-rounded button-icon"
-              style="color: #9333ea"
-            >
-              event_upcoming
-            </span>
-            <span class="button-text">Upcoming</span>
-          </button>
-          <button class="long-button">
-            <span
-              class="material-symbols-rounded button-icon"
-              style="color: #d97706"
-            >
-              date_range
-            </span>
-            <span class="button-text">Any Day</span>
-          </button>
-        </div>
-      </section>
-      <section class="custom-categories" id="workspaces"></section>
+      <div class="categories">
+        <section class="general-categories">
+          <div class="category-section">
+            <button class="long-button">
+              <span
+                class="material-symbols-rounded button-icon"
+                style="color: #0284c7"
+              >
+                all_inbox
+              </span>
+              <span class="button-text">All Projects</span>
+              <span class="notifier">2</span>
+            </button>
+          </div>
+          <div class="category-section">
+            <button class="long-button">
+              <span
+                class="material-symbols-rounded button-icon"
+                style="color: #059669"
+              >
+                today
+              </span>
+              <span class="button-text">Today</span>
+              <span class="notifier"></span>
+            </button>
+            <button class="long-button">
+              <span
+                class="material-symbols-rounded button-icon"
+                style="color: #9333ea"
+              >
+                event_upcoming
+              </span>
+              <span class="button-text">Upcoming</span>
+            </button>
+            <button class="long-button">
+              <span
+                class="material-symbols-rounded button-icon"
+                style="color: #d97706"
+              >
+                date_range
+              </span>
+              <span class="button-text">Any Day</span>
+            </button>
+          </div>
+        </section>
+        <section class="custom-categories" id="custom-categories">
+          <h4 class="custom-categories-title">Projects</h4>
+        </section>
+      </div>
       <section class="bottom-menu">
-        <button class="long-button">
+        <button class="long-button" id="new-list">
           <span class="material-symbols-rounded button-icon"> add </span>
           <span class="button-text">New List</span>
         </button>

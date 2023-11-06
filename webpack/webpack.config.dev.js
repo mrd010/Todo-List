@@ -1,3 +1,4 @@
+const path = require("path");
 const { merge } = require("webpack-merge");
 const common = require("./webpack.common.js");
 
@@ -8,9 +9,11 @@ module.exports = merge(common, {
     static: {
       directory: path.resolve(__dirname, "../dist"),
     },
+    watchFiles: ["src/*.html"],
     open: true,
-    hot: true,
     compress: true,
+    hot: true,
+    liveReload: false,
     historyApiFallback: true,
   },
 });

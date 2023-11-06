@@ -5,14 +5,17 @@ export function createMaterialIcon(style, className, name) {
   return icon;
 }
 
+//############################################################################################################################################################
 export function nameToId(name) {
   return name.toLowerCase().split(" ").join("-");
 }
 
+//############################################################################################################################################################
 export function appendChildren(element, children) {
   children.forEach((child) => element.appendChild(child));
 }
 
+//############################################################################################################################################################
 export function createElement(elementTag, elementClass, ...attributes) {
   const element = document.createElement(elementTag);
   if (elementClass) {

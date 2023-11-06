@@ -1,10 +1,18 @@
 @use "./variables" as *;
 @use "sass:math";
 @use "./cssPortal";
+@use "./animations";
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
 // font-family: 'Open Sans', sans-serif;
 
 // variables
+.theme-button {
+  background-color: $theme;
+  color: $white;
+  &:hover {
+    background-color: darken($color: $theme, $amount: 5%);
+  }
+}
 
 // reset
 * {
@@ -44,6 +52,7 @@ body {
   font-size: $base-fs;
   max-height: 100vh;
   min-height: 100vh;
+  color: $dark;
 
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -132,17 +141,15 @@ button {
 }
 
 .app-fixed-side {
-  position: relative;
+  height: 100%;
+  max-height: 100vh;
   background-color: darken($bg, $amount: 1%);
   grid-area: 2 / 1 / 3 / 2;
   min-width: $side-nav-size;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 0.5rem;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  gap: 1rem;
+  box-shadow: 0 0 12px -3px rgba($dark, $alpha: 0.4);
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr auto;
   .long-button {
     width: 100%;
     max-width: 200px;
@@ -166,30 +173,108 @@ button {
       opacity: 0.8;
       display: none;
     }
-    &:hover {
+    &.active {
+      background-color: rgba($theme, $alpha: 0.5);
+    }
+    &:not(.active):hover {
       background-color: rgba($dark, $alpha: 0.1);
       .notifier {
         opacity: 1;
       }
     }
   }
-  .category-section {
-    margin: {
-      top: 1rem;
-      bottom: 1rem;
+  .categories {
+    padding: 0.5rem;
+    max-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    .category-section {
+      margin: {
+        top: 0.75rem;
+        bottom: 0.75rem;
+      }
+    }
+  }
+
+  .custom-categories {
+    overflow-y: auto;
+    margin-top: 2.5rem;
+    .custom-categories-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-left: 1rem;
+      margin-bottom: 1rem;
+    }
+    .category-section {
+      background-color: rgba(lighten($dark, 50%), $alpha: 0.1);
+      border-radius: 8px;
+      padding: 0.4rem;
+      .category-header {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        .category-name {
+          margin-right: auto;
+          font-size: 0.9rem;
+          font-weight: 600;
+          padding: 0 1rem;
+        }
+        .more-button {
+          &:hover {
+            background-color: rgba($dark, $alpha: 0.1);
+          }
+          .button-icon {
+            font-size: 1.5rem;
+            font-weight: 300;
+          }
+        }
+      }
+      .category-content {
+        .long-button {
+          .button-text {
+            margin-left: 0.5rem;
+            font-size: 0.8rem;
+          }
+        }
+        .empty-notifier {
+          text-align: center;
+          font-size: 0.8rem;
+          padding: 0.4rem;
+          font-style: italic;
+          color: lighten($color: $dark, $amount: 25%);
+        }
+      }
+    }
+    .category-section:first-child {
+      // background-color: transparent;
+      .category-header {
+        display: none;
+      }
+      .category-content {
+        .long-button {
+          .button-text {
+            font-size: 0.9rem;
+          }
+        }
+      }
     }
   }
   .bottom-menu {
-    position: absolute;
-    bottom: 0;
-    left: 0;
     width: 100%;
-    background-color: darken($color: $white, $amount: 5%);
+    background-color: $theme;
+    border-top: 5px solid $white;
     .long-button {
+      color: $white;
       border-radius: 0;
       padding: 1rem;
       &:hover {
-        background-color: darken($color: $white, $amount: 10%);
+        background-color: darken($color: $theme, $amount: 5%);
       }
     }
   }
@@ -220,8 +305,8 @@ button {
     @extend %box-shadow;
     button.close-form {
       position: absolute;
-      top: 1rem;
-      right: 1rem;
+      top: 3%;
+      right: 3%;
       .button-icon {
         font-size: $icon-size * 0.8;
         transform: translateY(1px);
@@ -236,7 +321,11 @@ button {
     }
     .form-content {
       display: grid;
+      align-items: end;
       gap: 1rem;
+      .flipswitch {
+        transform: translateY(-7px);
+      }
       .form-field {
         display: flex;
         flex-direction: column;
@@ -272,23 +361,158 @@ button {
         }
       }
     }
+    .error-container {
+      position: absolute;
+      bottom: 110%;
+      left: 0;
+      background-color: $error;
+      @include cssPortal.boxShadow($error);
+      @include animations.fade(5s, 2s);
+      border-radius: 10px;
+      padding: 1rem;
+      color: $white;
+      transition: opacity 2s ease;
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 0.5rem;
+      .error {
+        font-weight: 500;
+        font-size: 1rem;
+        white-space: nowrap;
+      }
+    }
   }
 }
 
-.overlay-form .new-project {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto auto;
-  .form-content {
-    align-items: end;
-    .form-field {
-      grid-column: 1 / 3;
-      &:nth-child(3) {
-        grid-column: 1 / 2;
-        grid-row: 3 / 4;
+.overlay-form {
+  .new-task {
+    .form-content {
+      grid-template-columns: auto 1fr;
+      grid-auto-rows: auto;
+      @include cssPortal.flipSwitch;
+      .form-field {
+        grid-column: 1 / 3;
+        &:nth-child(3) {
+          grid-column: 1 / 2;
+          grid-row: 3 / 4;
+        }
+        &:nth-child(4) {
+          grid-column: 2 / 3;
+          grid-row: 3 / 4;
+        }
+        &:nth-child(5) {
+          grid-column: 1 / 2;
+          grid-row: 4 / 5;
+        }
+        &:last-child {
+          grid-column: 1 / 3;
+          grid-row: 4 / 5;
+        }
       }
-      &:last-child {
-        grid-column: 2 / 3;
-        grid-row: 3 / 4;
+    }
+  }
+  .new-project {
+    .form-content {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      align-items: end;
+      .form-field {
+        grid-column: 1 / 3;
+        &:nth-child(3) {
+          grid-column: 1 / 2;
+          grid-row: 3 / 4;
+        }
+        &:last-child {
+          grid-column: 2 / 3;
+          grid-row: 3 / 4;
+        }
+      }
+    }
+  }
+}
+
+.project-page {
+  padding: 2rem 4rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  gap: 2rem;
+  .project-header {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    .header-title {
+      font-size: 2rem;
+      margin-right: 2rem;
+      white-space: nowrap;
+    }
+    .more-button {
+      display: grid;
+      place-items: center;
+      margin-top: 0.2rem;
+      .button-icon {
+        transform: translateY(1px);
+        font-size: 1.5rem;
+        font-weight: 300;
+      }
+      &:hover {
+        background-color: rgba(lighten($dark, 25%), 0.1);
+      }
+    }
+  }
+  .project-description {
+    width: 50%;
+    min-width: 400px;
+    font-size: 1rem;
+    background-color: rgba(lighten($dark, 50%), $alpha: 0.25);
+    border-radius: 10px;
+    padding: 0.5rem 1rem;
+  }
+
+  .project-tasks {
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 75px 1fr;
+    grid-template-rows: auto 1fr;
+    row-gap: 1rem;
+    align-items: center;
+    justify-items: start;
+    .tasks-header {
+      font-size: 1.2rem;
+    }
+    .tasks-buttons {
+      display: flex;
+      flex-flow: row nowrap;
+      gap: 1rem;
+      .new-task-button,
+      .new-category-button {
+        @extend .theme-button;
+      }
+    }
+    .task-categories {
+      width: 100%;
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      .task-container {
+        padding: 0.5rem;
+        border: 1px solid $dark;
+        border-radius: 6px;
+        align-items: center;
+        display: grid;
+        grid-template-columns: 100px 1fr;
+        .task-title {
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+        .task-description {
+          font-size: 0.8rem;
+          font-weight: 400;
+        }
       }
     }
   }

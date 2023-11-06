@@ -5,12 +5,14 @@ export function saveToStorage(projects, projectCategories) {
   localStorage.setItem("categoriesData", JSON.stringify(projectCategories));
 }
 
+//############################################################################################################################################################
 export function loadFromStorage() {
   const projectsData = JSON.parse(localStorage.getItem("projectsData"));
   const categoriesData = JSON.parse(localStorage.getItem("categoriesData"));
   return { projectsInfo: projectsData, categoriesInfo: categoriesData };
 }
 
+//############################################################################################################################################################
 export function empty() {
   return localStorage.length ? false : true;
 }
