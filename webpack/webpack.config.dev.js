@@ -12,8 +12,8 @@ module.exports = merge(common, {
     watchFiles: ["src/*.html"],
     open: true,
     compress: true,
-    hot: true,
-    liveReload: false,
+    hot: false,
+    liveReload: true,
     historyApiFallback: true,
   },
 });

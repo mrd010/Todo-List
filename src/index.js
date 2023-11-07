@@ -1,6 +1,6 @@
-import { loadDefaultPage } from "./displayController";
 import "./styles/normalize.css";
-import "material-symbols/rounded.css";
+import "material-symbols/sharp.css";
 import "./styles/index.scss";
+import * as display from "./scripts/displayController";
 
-loadDefaultPage();
+// initialize();
