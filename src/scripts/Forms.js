@@ -1,4 +1,3 @@
-import { pluginName } from "mini-css-extract-plugin";
 import {
   createElement,
   appendChildren,
@@ -8,21 +7,15 @@ import {
 //#########################################################################################################
 class Form {
   formBody;
-  closeBtn;
-  formTitle;
   submitBtn;
   constructor(formName) {
     this.formBody = createElement("form", undefined, ["action", "#"]);
-    const formHeader = createElement("div", ".form-header");
-    this.formTitle = createElement("h3", "form-header-title");
-    this.formTitle.textContent = formName;
-    this.closeBtn = createElement("button", "short-button");
-    this.closeBtn.appendChild(
-      createMaterialIcon("sharp", "button-icon", "close")
-    );
-    appendChildren(formHeader, [this.formTitle, this.closeBtn]);
-    this.formBody.appendChild(formHeader);
-    this.submitBtn.createElement("button", "submit-button", ["type", "submit"]);
+    this.submitBtn = createElement("button", "submit-button", [
+      "type",
+      "submit",
+    ]);
+    this.submitBtn.classList.add("text-button");
+    this.submitBtn.textContent = formName;
   }
 
   get Body() {
@@ -31,15 +24,15 @@ class Form {
 }
 //#########################################################################################################
 export class ProjectForm extends Form {
-  projectName;
-  projectDesc;
+  projectNameField;
+  projectDescField;
   constructor(formTitle) {
     super(formTitle);
-    this.projectName = createElement("div", "input-field", [
+    this.projectNameField = createElement("div", "input-field", [
       "id",
       "project-name-field",
     ]);
-    appendChildren(this.projectName, [
+    appendChildren(this.projectNameField, [
       createElement("label", undefined, ["for", "project-name"]),
       createElement(
         "input",
@@ -50,31 +43,37 @@ export class ProjectForm extends Form {
         ["required", true]
       ),
     ]);
-    this.projectName.querySelector("label").textContent = "Project Name";
+    this.projectNameField.querySelector("label").textContent = "Project Name";
     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-    this.projectDesc = createElement("div", "input-field", [
+    this.projectDescField = createElement("div", "input-field", [
       "id",
       "project-desc-field",
     ]);
-    appendChildren(
-      this.projectDesc,
+    appendChildren(this.projectDescField, [
       createElement("label", undefined, ["for", "project-desc"]),
       createElement(
         "textarea",
         undefined,
-        ["name", "project-name"],
-        ["id", "project-name"],
-        ["row", "5"],
+        ["name", "project-desc"],
+        ["id", "project-desc"],
         ["col", "30"]
-      )
-    );
-    this.projectDesc.querySelector("label").textContent = "Project Description";
+      ),
+    ]);
+    this.projectDescField.querySelector("label").textContent =
+      "Project Description";
     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     appendChildren(this.formBody, [
-      this.projectName,
-      this.projectDesc,
+      this.projectNameField,
+      this.projectDescField,
       this.submitBtn,
     ]);
+  }
+
+  get formData() {
+    return {
+      projectName: this.projectNameField.querySelector("input").value,
+      projectDesc: this.projectDescField.querySelector("textarea").value,
+    };
   }
 }
 //#########################################################################################################
@@ -96,4 +95,15 @@ class TaskForm extends Form {
 
 class Confirm extends Form {
   constructor() {}
+}
+//#########################################################################################################
+
+class DeleteForm extends Form {
+  cancelButton;
+  constructor() {
+    super("Delete Project");
+    this.cancelButton = createElement("button", "cancel-button");
+    this.cancelButton.textContent = "Cancel";
+    appendChildren(this.formBody, [this.cancelButton, this.submitBtn]);
+  }
 }

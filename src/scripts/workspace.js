@@ -102,19 +102,64 @@ class Project {
       this.#tasks[taskIndex],
     ];
   }
+
+  reCreateTask(
+    taskTitle,
+    taskDesc,
+    taskDueDate,
+    taskPriority,
+    taskDone,
+    taskId
+  ) {
+    const newTask = new Task(
+      taskTitle,
+      taskDesc,
+      taskDueDate,
+      taskPriority,
+      taskId
+    );
+    newTask.done = taskDone;
+
+    this.#tasks.push(newTask);
+  }
 }
 
 //#########################################################################################################
 // Workspace Module
 const projects = [];
 
-function createProject(title, desc) {
+export function loadWorkspace() {
+  const data = fetchWorkspace();
+  console.log(data);
+  data.forEach((projectData) =>
+    reCreateProject(
+      projectData.projectTitle,
+      projectData.projectDescription,
+      projectData.projectTasks,
+      projectData.projectId
+    )
+  );
+}
+
+export function createProject(title, desc) {
   projects.push(new Project(title, desc));
+  saveWorkspace();
 }
 
 function reCreateProject(title, desc, tasks, id) {
   const project = new Project(title, desc, id);
-  tasks.forEach((task) => project.addTask(task));
+  tasks.forEach((taskData) =>
+    project.reCreateTask(
+      taskData.taskTitle,
+      taskData.taskDesc,
+      taskData.taskDueDate,
+      taskData.taskPriority,
+      taskData.taskDone,
+      taskData.taskId
+    )
+  );
+
+  projects.push(project);
 }
 
 function createTask(projectId, taskTitle, taskDesc, taskDueDate, taskPriority) {
@@ -123,31 +168,14 @@ function createTask(projectId, taskTitle, taskDesc, taskDueDate, taskPriority) {
   if (project) {
     project.addTask(newTask);
   }
-}
-
-function reCreateTask(
-  project,
-  taskTitle,
-  taskDesc,
-  taskDueDate,
-  taskPriority,
-  taskId
-) {
-  const newTask = new Task(
-    taskTitle,
-    taskDesc,
-    taskDueDate,
-    taskPriority,
-    taskId
-  );
-
-  project.addTask(newTask);
+  saveWorkspace();
 }
 
 function editProject(projectId, title, desc) {
   const project = projects.find((prj) => prj.id == projectId);
   project.title = title;
   project.description = desc;
+  saveWorkspace();
 }
 
 function editProjectTask(
@@ -161,6 +189,7 @@ function editProjectTask(
   projects
     .find((prj) => prj.id == projectId)
     .editTask(taskId, taskTitle, taskDesc, taskDueDate, taskPriority);
+  saveWorkspace();
 }
 
 function deleteProject(projectId) {
@@ -168,26 +197,30 @@ function deleteProject(projectId) {
   if (projectIndex) {
     projects.splice(projectIndex, 1);
   }
+  saveWorkspace();
 }
 
 function deleteProjectTask(projectId, taskId) {
   const project = projects.find((prj) => prj.id == projectId);
   project.deleteTask(taskId);
+  saveWorkspace();
 }
 
 function changeTaskDoneStatus(projectId, taskId, doneStatus) {
   projects
     .find((prj) => prj.id == projectId)
     .changeTaskStatus(taskId, doneStatus);
+  saveWorkspace();
 }
 
 function moveTask(projectId, taskId, dir) {
   const project = projects.find((prj) => prj.id == projectId);
   project.moveTask(taskId, dir);
+  saveWorkspace();
 }
 
 function projectsData() {
-  return projectsList.map((project) => {
+  return projects.map((project) => {
     return {
       projectTitle: project.title,
       projectDescription: project.description,
@@ -197,15 +230,25 @@ function projectsData() {
   });
 }
 
+export function projectData(projectId) {
+  const project = projects.find((prj) => prj.id == projectId);
+  return {
+    projectTitle: project.title,
+    projectDescription: project.description,
+    projectId: project.id,
+    projectTasks: project.tasksData(),
+  };
+}
+
 function saveWorkspace() {
   Storage.saveToStorage(projectsData());
 }
 
-function loadWorkspace() {
+function fetchWorkspace() {
   return Storage.loadFromStorage();
 }
 
-function allProjects() {
+export function allProjects() {
   return projectsData();
 }
 

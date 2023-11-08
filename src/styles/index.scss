@@ -34,6 +34,21 @@ button {
   &:active {
     background-color: rgba($color: $mid, $alpha: 0.1);
   }
+  &.short-button {
+    border-radius: 20px;
+    padding: 0.2rem;
+    width: 30px;
+    height: 30px;
+    background-color: rgba($color: $mid, $alpha: 0.1);
+    display: grid;
+    place-items: center;
+    .button-icon {
+      font-size: 1.2rem;
+    }
+    &:hover {
+      background-color: rgba($color: $mid, $alpha: 0.2);
+    }
+  }
 }
 
 // main styles
@@ -59,6 +74,7 @@ body {
   display: grid;
   grid-template-columns: 1fr $sideNavSize;
   align-items: center;
+  overflow: visible;
 
   .header-title {
     margin-right: auto;
@@ -85,17 +101,66 @@ body {
       }
     }
     button.pressed {
-      box-shadow: 0 0 10px $dark inset;
-      .menu {
-        display: block;
+      box-shadow: 0 3px 5px rgba($color: $dark, $alpha: 0.4);
+      background-color: darken($color: $theme, $amount: 20%);
+      + .menu {
+        transform: scaleY(1);
+        form {
+          background-color: darken($color: $theme, $amount: 20%);
+        }
       }
     }
     .menu {
+      transition: transform 0.2s ease;
+      transform: scaleY(0);
+      transform-origin: top;
+      z-index: 1;
       width: 100%;
       position: absolute;
       top: 100%;
       right: 0;
-      display: none;
+      form {
+        transition: background 0.2s ease;
+        box-shadow: 0 5px 5px rgba($color: $dark, $alpha: 0.4);
+        background-color: $theme;
+        display: grid;
+        grid-auto-rows: auto;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        .input-field {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          flex-wrap: nowrap;
+          gap: 0.3rem;
+          label {
+            font-size: 0.9rem;
+          }
+          input[type="text"],
+          textarea {
+            border: none;
+            outline: none;
+            padding: 0.5rem;
+            border-radius: 5px;
+            resize: none;
+            color: $dark;
+          }
+        }
+        .submit-button {
+          padding: 0.5rem;
+          border: none;
+          outline: none;
+          border-radius: 5px;
+          &:hover,
+          &:focus {
+            background-color: rgba($color: $white, $alpha: 0.1);
+          }
+          &:active {
+            background-color: rgba($color: $white, $alpha: 0.2);
+          }
+        }
+      }
     }
   }
 }
@@ -139,13 +204,21 @@ body {
     width: 100%;
   }
   .projects-nav {
-    display: grid;
-    .project-button {
+    width: 100%;
+    .wrapper {
       display: flex;
-      flex-flow: row nowrap;
-      gap: 0.5rem;
-      .short-button {
-        justify-self: end;
+      flex-flow: column nowrap;
+      .projects-nav-button {
+        border-top: 1px solid rgba($color: $mid, $alpha: 0.1);
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr auto auto;
+        gap: 0.6rem;
+        align-items: center;
+        justify-items: start;
       }
     }
   }
