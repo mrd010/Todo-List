@@ -1,5 +1,5 @@
 import * as Workspace from "./workspace";
-import { ProjectForm, DeleteForm, EditProjectForm } from "./Forms";
+import { ProjectForm, DeleteForm, EditProjectForm, TaskForm } from "./Forms";
 import {
   appendChildren,
   createElement,
@@ -21,6 +21,7 @@ function toggleAddProjectForm() {
   let wrapper = document.querySelector("#add-project-menu .wrapper");
   if (!wrapper && this.classList.contains("pressed")) {
     const addProjectForm = new ProjectForm("Add Project");
+    addProjectForm.Body.classList.add("new-project-form");
     let wrapper = document.querySelector("#add-project-menu .wrapper");
     wrapper = createElement("div", "wrapper");
     wrapper.appendChild(addProjectForm.Body);
@@ -39,7 +40,7 @@ function toggleAddProjectForm() {
 
 function submitNewProjectForm(projectForm) {
   const projectData = projectForm.formData;
-  Workspace.createProject(projectData.projectName, projectData.projectName);
+  Workspace.createProject(projectData.projectName, projectData.projectDesc);
   refreshSideBar();
 }
 
@@ -71,7 +72,9 @@ function refreshSideBar() {
     ".projects-nav-button"
   );
   projectButtons.forEach((projectButton) => {
-    projectButton.addEventListener("click", showProject);
+    projectButton.addEventListener("click", () =>
+      showProject(projectButton.getAttribute("data-project-id"))
+    );
 
     projectButton
       .querySelector(".edit-button")
@@ -113,7 +116,8 @@ function showEditProjectForm(projectBtn) {
       Workspace.projectData(projectId).projectDescription
     );
     projectBtn.insertAdjacentElement("afterend", editProjectForm.Body);
-    editProjectForm.submitBtn.addEventListener("click", () => {
+    editProjectForm.submitBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       const projectData = editProjectForm.formData;
       Workspace.editProject(
         projectId,
@@ -152,7 +156,8 @@ function showDeleteProjectForm(projectBtn) {
 
     const deleteForm = new DeleteForm();
     projectBtn.insertAdjacentElement("afterend", deleteForm.Body);
-    deleteForm.submitBtn.addEventListener("click", () => {
+    deleteForm.submitBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       Workspace.deleteProject(projectBtn.getAttribute("data-project-id"));
       refreshSideBar();
       openedForm.formBtn = null;
@@ -173,11 +178,15 @@ function showDeleteProjectForm(projectBtn) {
 
 let currentOpenedProjectId;
 
-function showProject() {
-  const projectData = Workspace.projectData(
-    this.getAttribute("data-project-id")
-  );
-  createProjectPage(projectData);
+function showProject(projectId) {
+  const projectData = Workspace.projectData(projectId);
+  let wrapper = document.querySelector("#content .wrapper");
+  if (wrapper) {
+    wrapper.remove();
+  }
+  wrapper = createElement("div", "wrapper");
+  wrapper.appendChild(createProjectPage(projectData));
+  document.querySelector("#content").appendChild(wrapper);
 }
 
 function createProjectPage({
@@ -201,7 +210,9 @@ function createProjectPage({
     "data-project-id",
     projectId,
   ]);
+
   addTaskBtn.classList.add("add-task-button");
+  addTaskBtn.classList.add("open-button");
   addTaskBtn.textContent = "Create Task";
   addTaskBtn.addEventListener("click", showNewTaskForm);
   addTaskMenu.appendChild(addTaskBtn);
@@ -214,14 +225,20 @@ function createProjectPage({
   return projectPage;
 }
 
-function createProjectTaskBar() {}
-
 function showNewTaskForm() {
   const addTaskMenu = this.parentNode;
   const form = addTaskMenu.querySelector("form");
   if (form) {
     form.remove();
-    this.classList.remove("opened");
+    this.classList.remove("pressed");
   } else {
+    const taskForm = new TaskForm("Create Task");
+    taskForm.Body.classList.add("new-task-form");
+    addTaskMenu.appendChild(taskForm.Body);
+    this.classList.add("pressed");
+
+    taskForm.submitBtn.addEventListener("click", (e) => {});
   }
 }
+
+function createProjectTaskBar() {}

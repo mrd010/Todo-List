@@ -78,7 +78,7 @@ export class ProjectForm extends Form {
   }
 }
 //#########################################################################################################
-class TaskForm extends Form {
+export class TaskForm extends Form {
   taskName;
   taskDesc;
   taskDueDate;
@@ -136,13 +136,16 @@ class TaskForm extends Form {
     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     this.taskPriority = createElement("div", "input-field", [
       "id",
-      "task-due-date",
+      "task-priority",
     ]);
+    const label = createElement("label");
     const sw = createElement("label", "switch");
-    appendChildren(
+    appendChildren(sw, [
       createElement("input", undefined, ["type", "checkbox"]),
-      createElement("span", "slider")
-    );
+      createElement("span", "slider"),
+    ]);
+    label.textContent = "Priority";
+    this.taskPriority.appendChild(label);
     this.taskPriority.appendChild(sw);
     //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     appendChildren(this.formBody, [
@@ -156,10 +159,10 @@ class TaskForm extends Form {
 
   get formData() {
     return {
-      projectName: this.projectNameField.querySelector("input").value,
-      projectDesc: this.projectDescField.querySelector("textarea").value,
-      projectDueDate: this.projectDueDate.querySelector("input").value,
-      projectPriority: this.projectPriority.querySelector("textarea").value,
+      taskName: this.taskNameField.querySelector("input").value,
+      taskDesc: this.taskDescField.querySelector("textarea").value,
+      taskDueDate: this.taskDueDate.querySelector("input").value,
+      taskPriority: this.taskPriority.querySelector("textarea").value,
     };
   }
 }
@@ -196,5 +199,23 @@ export class EditProjectForm extends ProjectForm {
   setFormValues(projectName, projectDesc) {
     this.projectNameField.querySelector("input").value = projectName;
     this.projectDescField.querySelector("textarea").value = projectDesc;
+  }
+}
+//#########################################################################################################
+export class EditTaskForm extends TaskForm {
+  cancelButton;
+  constructor() {
+    super("Save Task");
+    this.formBody.classList.add("edit-task-form");
+    this.cancelButton = createElement("button", "cancel-button");
+    this.cancelButton.textContent = "Cancel";
+    this.formBody.appendChild(this.cancelButton);
+  }
+
+  setFormValues(taskName, taskDesc, taskDueDate, taskPriority) {
+    this.taskNameField.querySelector("input").value = taskName;
+    this.taskDescField.querySelector("textarea").value = taskDesc;
+    this.taskDueDate.querySelector("input").value = taskDueDate;
+    this.taskPriority.querySelector("checkbox").value = taskPriority;
   }
 }

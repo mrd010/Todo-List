@@ -19,6 +19,133 @@ $mid: #475569;
 }
 
 // general styles
+%pressed-button {
+  box-shadow: 0 3px 5px rgba($color: $dark, $alpha: 0.4);
+  background-color: darken($color: $theme, $amount: 20%);
+  + [class$="menu"] {
+    transform: scaleY(1);
+    form {
+      background-color: darken($color: $theme, $amount: 20%);
+    }
+  }
+  + form {
+    transform: scaleY(1);
+    background-color: darken($color: $theme, $amount: 20%);
+  }
+}
+%new-form {
+  transition: background 0.2s ease;
+  box-shadow: 0 5px 5px rgba($color: $dark, $alpha: 0.4);
+  background-color: $theme;
+  display: grid;
+  grid-auto-rows: auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  #task-priority {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+  }
+  .input-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 0.3rem;
+    label {
+      font-size: 0.9rem;
+    }
+    input[type="text"],
+    input[type="date"],
+    textarea {
+      border: none;
+      outline: none;
+      padding: 0.5rem;
+      border-radius: 5px;
+      resize: none;
+      color: $dark;
+    }
+    /* The switch - the box around the slider */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 60px;
+      height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    /* The slider */
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: transparent;
+      border: 1px solid $white;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+      border-radius: 5px;
+    }
+
+    .slider:before {
+      border-radius: 5px;
+      position: absolute;
+      content: "";
+      height: 26px;
+      width: 26px;
+      left: 4px;
+      bottom: 3px;
+      background-color: white;
+      -webkit-transition: 0.4s;
+      transition: 0.4s;
+    }
+
+    input:checked + .slider {
+      background-color: $theme;
+    }
+
+    input:focus + .slider {
+      box-shadow: 0 0 1px #2196f3;
+    }
+
+    input:checked + .slider:before {
+      -webkit-transform: translateX(26px);
+      -ms-transform: translateX(26px);
+      transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+      border-radius: 34px;
+    }
+
+    .slider.round:before {
+      border-radius: 50%;
+    }
+  }
+  .submit-button {
+    padding: 0.5rem;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    &:hover,
+    &:focus {
+      background-color: rgba($color: $white, $alpha: 0.1);
+    }
+    &:active {
+      background-color: rgba($color: $white, $alpha: 0.2);
+    }
+  }
+}
 
 button {
   border: none;
@@ -101,14 +228,7 @@ body {
       }
     }
     button.pressed {
-      box-shadow: 0 3px 5px rgba($color: $dark, $alpha: 0.4);
-      background-color: darken($color: $theme, $amount: 20%);
-      + .menu {
-        transform: scaleY(1);
-        form {
-          background-color: darken($color: $theme, $amount: 20%);
-        }
-      }
+      @extend %pressed-button;
     }
     .menu {
       transition: transform 0.2s ease;
@@ -119,47 +239,8 @@ body {
       position: absolute;
       top: 100%;
       right: 0;
-      form {
-        transition: background 0.2s ease;
-        box-shadow: 0 5px 5px rgba($color: $dark, $alpha: 0.4);
-        background-color: $theme;
-        display: grid;
-        grid-auto-rows: auto;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        .input-field {
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          flex-wrap: nowrap;
-          gap: 0.3rem;
-          label {
-            font-size: 0.9rem;
-          }
-          input[type="text"],
-          textarea {
-            border: none;
-            outline: none;
-            padding: 0.5rem;
-            border-radius: 5px;
-            resize: none;
-            color: $dark;
-          }
-        }
-        .submit-button {
-          padding: 0.5rem;
-          border: none;
-          outline: none;
-          border-radius: 5px;
-          &:hover,
-          &:focus {
-            background-color: rgba($color: $white, $alpha: 0.1);
-          }
-          &:active {
-            background-color: rgba($color: $white, $alpha: 0.2);
-          }
-        }
+      .new-project-form {
+        @extend %new-form;
       }
     }
   }
@@ -303,6 +384,80 @@ body {
         .cancel-button:hover,
         .cancel-button:focus {
           background-color: rgba($color: $white, $alpha: 0.3);
+        }
+      }
+    }
+  }
+}
+
+#content .wrapper {
+  color: $dark;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  padding: 0.5rem;
+  .project-header {
+    font-size: 2rem;
+    padding: 1rem;
+    font-weight: 700;
+  }
+  .project-desc {
+    font-size: 1.2rem;
+    padding: 0.5rem;
+    background-color: rgba($color: $dark, $alpha: 0.1);
+    border-radius: 10px;
+    margin: 1rem;
+  }
+  .project-tasks {
+    padding: 1rem;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 1rem;
+    .project-tasks-header {
+      padding: 0.5rem;
+      display: grid;
+      grid-template-columns: 200px minmax(300px, 25%);
+      align-items: center;
+      .add-task-menu {
+        position: relative;
+        color: $white;
+        .add-task-button {
+          padding: 0.8rem 1rem;
+          background-color: $theme;
+          color: $white;
+          font-weight: 500;
+          transition: none;
+        }
+        button.opened {
+          background-color: darken($color: $theme, $amount: 20%);
+        }
+        .new-task-form {
+          transition: transform 0.2s ease;
+          transform: scaleY(0);
+          transform-origin: top;
+          z-index: 1;
+          width: 100%;
+          position: absolute;
+          top: 100%;
+          right: 0;
+          @extend %new-form;
+          border-radius: 10px;
+          border-top-left-radius: 0;
+          grid-template-columns: 1fr 1fr;
+          div,
+          button {
+            grid-column: 1 / -1;
+            &#task-due-date {
+              grid-column: 1 / 2;
+            }
+            &#task-priority {
+              grid-column: 2 / 3;
+            }
+          }
+        }
+        button.pressed {
+          @extend %pressed-button;
         }
       }
     }
