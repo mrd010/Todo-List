@@ -76,26 +76,91 @@ export class ProjectForm extends Form {
       projectDesc: this.projectDescField.querySelector("textarea").value,
     };
   }
-
-  setFormValues(projectName, projectDesc) {
-    this.projectNameField.querySelector("input").value = projectName;
-    this.projectDescField.querySelector("textarea").value = projectDesc;
-  }
 }
 //#########################################################################################################
 class TaskForm extends Form {
-  type;
   taskName;
   taskDesc;
   taskDueDate;
   taskPriority;
-  constructor(type) {
-    if (type == "add") {
-      super("Add Project");
-    } else if (type == "edit") {
-      super("Edit Project");
-    }
-    this.type = type;
+  constructor(submitName) {
+    super(submitName);
+    this.taskNameField = createElement("div", "input-field", [
+      "id",
+      "task-name-field",
+    ]);
+    appendChildren(this.taskNameField, [
+      createElement("label", undefined, ["for", "task-name"]),
+      createElement(
+        "input",
+        undefined,
+        ["type", "text"],
+        ["name", "task-name"],
+        ["id", "task-name"],
+        ["required", true]
+      ),
+    ]);
+    this.taskNameField.querySelector("label").textContent = "Task Title";
+    //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    this.taskDescField = createElement("div", "input-field", [
+      "id",
+      "task-desc-field",
+    ]);
+    appendChildren(this.taskDescField, [
+      createElement("label", undefined, ["for", "task-desc"]),
+      createElement(
+        "textarea",
+        undefined,
+        ["name", "task-desc"],
+        ["id", "task-desc"],
+        ["col", "30"]
+      ),
+    ]);
+    this.taskDescField.querySelector("label").textContent = "Task Description";
+    //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    this.taskDueDate = createElement("div", "input-field", [
+      "id",
+      "task-due-date",
+    ]);
+    appendChildren(this.taskDueDate, [
+      createElement("label", undefined, ["for", "task-due-date"]),
+      createElement(
+        "input",
+        undefined,
+        ["type", "date"],
+        ["name", "task-due-date"],
+        ["id", "task-due-date"]
+      ),
+    ]);
+    this.taskDueDate.querySelector("label").textContent = "Task Due Date";
+    //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    this.taskPriority = createElement("div", "input-field", [
+      "id",
+      "task-due-date",
+    ]);
+    const sw = createElement("label", "switch");
+    appendChildren(
+      createElement("input", undefined, ["type", "checkbox"]),
+      createElement("span", "slider")
+    );
+    this.taskPriority.appendChild(sw);
+    //$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+    appendChildren(this.formBody, [
+      this.taskNameField,
+      this.taskDescField,
+      this.taskDueDate,
+      this.taskPriority,
+      this.submitBtn,
+    ]);
+  }
+
+  get formData() {
+    return {
+      projectName: this.projectNameField.querySelector("input").value,
+      projectDesc: this.projectDescField.querySelector("textarea").value,
+      projectDueDate: this.projectDueDate.querySelector("input").value,
+      projectPriority: this.projectPriority.querySelector("textarea").value,
+    };
   }
 }
 //#########################################################################################################
@@ -126,5 +191,10 @@ export class EditProjectForm extends ProjectForm {
     this.cancelButton = createElement("button", "cancel-button");
     this.cancelButton.textContent = "Cancel";
     this.formBody.appendChild(this.cancelButton);
+  }
+
+  setFormValues(projectName, projectDesc) {
+    this.projectNameField.querySelector("input").value = projectName;
+    this.projectDescField.querySelector("textarea").value = projectDesc;
   }
 }

@@ -171,8 +171,57 @@ function showDeleteProjectForm(projectBtn) {
   }
 }
 
+let currentOpenedProjectId;
+
 function showProject() {
   const projectData = Workspace.projectData(
     this.getAttribute("data-project-id")
   );
+  createProjectPage(projectData);
+}
+
+function createProjectPage({
+  projectTitle: projectTitle,
+  projectDescription: projectDescription,
+  projectTasks: projectTasks,
+  projectId: projectId,
+}) {
+  const projectPage = createElement("div", "project-page");
+  const pageHeader = createElement("h2", "project-header");
+  pageHeader.textContent = projectTitle;
+  const pageDesc = createElement("p", "project-desc");
+  pageDesc.textContent = projectDescription;
+  appendChildren(projectPage, [pageHeader, pageDesc]);
+  const pageTasks = createElement("div", "project-tasks");
+  const pageTasksHeader = createElement("div", "project-tasks-header");
+  const pageTasksHeaderTitle = createElement("h3", "project-tasks-header");
+  pageTasksHeaderTitle.textContent = "Tasks";
+  const addTaskMenu = createElement("div", "add-task-menu");
+  const addTaskBtn = createElement("button", "text-button", [
+    "data-project-id",
+    projectId,
+  ]);
+  addTaskBtn.classList.add("add-task-button");
+  addTaskBtn.textContent = "Create Task";
+  addTaskBtn.addEventListener("click", showNewTaskForm);
+  addTaskMenu.appendChild(addTaskBtn);
+  appendChildren(pageTasksHeader, [pageTasksHeaderTitle, addTaskMenu]);
+  pageTasks.appendChild(pageTasksHeader);
+  const pageTasksList = createElement("div", "project-tasks-list");
+  projectTasks.forEach((task) => {});
+  pageTasks.appendChild(pageTasksList);
+  projectPage.appendChild(pageTasks);
+  return projectPage;
+}
+
+function createProjectTaskBar() {}
+
+function showNewTaskForm() {
+  const addTaskMenu = this.parentNode;
+  const form = addTaskMenu.querySelector("form");
+  if (form) {
+    form.remove();
+    this.classList.remove("opened");
+  } else {
+  }
 }
