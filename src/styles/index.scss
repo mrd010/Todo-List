@@ -220,6 +220,91 @@ body {
         align-items: center;
         justify-items: start;
       }
+      .selected-for-edit {
+        .short-button {
+          background-color: rgba($color: $white, $alpha: 0.1);
+        }
+        .edit-button {
+          background-color: $white;
+          color: $dark;
+        }
+      }
+      .selected-for-delete {
+        .short-button {
+          background-color: rgba($color: $white, $alpha: 0.1);
+        }
+        .delete-button {
+          background-color: $white;
+          color: $dark;
+        }
+      }
+      button[class*="selected-for"] {
+        background-color: $dark;
+        color: $white;
+      }
+      .edit-project-form {
+        row-gap: 1rem;
+        .submit-button {
+          grid-column: 2 / -1;
+        }
+        .cancel-button {
+          grid-row: 3 / 4;
+        }
+      }
+      .delete-project-form,
+      .edit-project-form {
+        width: 100%;
+        background-color: $dark;
+        color: $white;
+        padding-top: 1rem;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+
+        .confirm-alert {
+          grid-column: 1 / -1;
+          font-size: 0.8rem;
+          padding: 1rem;
+          text-align: center;
+        }
+        .input-field {
+          grid-column: 1 / -1;
+          width: 100%;
+          padding: 0.5rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          input,
+          textarea {
+            resize: none;
+            padding: 0.5rem;
+            color: $dark;
+            border: none;
+            outline: none;
+
+            border-radius: 5px;
+          }
+        }
+        .submit-button {
+          border-left: 1px solid rgba($color: $white, $alpha: 0.2);
+        }
+        .submit-button,
+        .cancel-button {
+          background-color: rgba($color: $white, $alpha: 0.1);
+          padding: 0.5rem;
+          transition: none;
+        }
+        .submit-button:hover,
+        .submit-button:focus {
+          background-color: brown;
+          border-color: brown;
+        }
+        .cancel-button:hover,
+        .cancel-button:focus {
+          background-color: rgba($color: $white, $alpha: 0.3);
+        }
+      }
     }
   }
 }

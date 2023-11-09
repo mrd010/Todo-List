@@ -171,7 +171,7 @@ function createTask(projectId, taskTitle, taskDesc, taskDueDate, taskPriority) {
   saveWorkspace();
 }
 
-function editProject(projectId, title, desc) {
+export function editProject(projectId, title, desc) {
   const project = projects.find((prj) => prj.id == projectId);
   project.title = title;
   project.description = desc;
@@ -192,9 +192,9 @@ function editProjectTask(
   saveWorkspace();
 }
 
-function deleteProject(projectId) {
+export function deleteProject(projectId) {
   const projectIndex = projects.findIndex((prj) => prj.id == projectId);
-  if (projectIndex) {
+  if (projectIndex >= 0) {
     projects.splice(projectIndex, 1);
   }
   saveWorkspace();

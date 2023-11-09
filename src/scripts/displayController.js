@@ -1,5 +1,5 @@
 import * as Workspace from "./workspace";
-import { ProjectForm } from "./Forms";
+import { ProjectForm, DeleteForm, EditProjectForm } from "./Forms";
 import {
   appendChildren,
   createElement,
@@ -60,7 +60,7 @@ function refreshSideBar() {
     editBtn.classList.add("edit-button");
     editBtn.appendChild(createMaterialIcon("sharp", "button-icon", "edit"));
     const deleteBtn = createElement("button", "short-button");
-    editBtn.classList.add("delete-button");
+    deleteBtn.classList.add("delete-button");
     deleteBtn.appendChild(createMaterialIcon("sharp", "button-icon", "delete"));
     appendChildren(projectBtn, [editBtn, deleteBtn]);
     wrapper.appendChild(projectBtn);
@@ -76,15 +76,99 @@ function refreshSideBar() {
     projectButton
       .querySelector(".edit-button")
       .addEventListener("click", (e) => {
-        showEditProjectForm(projectButton, e);
+        showEditProjectForm(projectButton);
       });
 
     projectButton
       .querySelector(".delete-button")
       .addEventListener("click", (e) => {
-        showDeleteProjectForm(projectButton, e);
+        showDeleteProjectForm(projectButton);
       });
   });
+}
+
+let openedForm = {
+  formBtn: null,
+  formType: "",
+};
+
+function showEditProjectForm(projectBtn) {
+  const form = document.querySelector("#projects-nav form");
+  if (openedForm.formBtn == projectBtn && openedForm.formType == "edit") {
+    form.remove();
+    openedForm.formBtn = null;
+    openedForm.formType = "";
+    projectBtn.classList.remove("selected-for-edit");
+  } else {
+    if (form) {
+      form.remove();
+      openedForm.formBtn.classList.remove("selected-for-edit");
+      openedForm.formBtn.classList.remove("selected-for-delete");
+    }
+
+    const projectId = projectBtn.getAttribute("data-project-id");
+    const editProjectForm = new EditProjectForm();
+    editProjectForm.setFormValues(
+      Workspace.projectData(projectId).projectTitle,
+      Workspace.projectData(projectId).projectDescription
+    );
+    projectBtn.insertAdjacentElement("afterend", editProjectForm.Body);
+    editProjectForm.submitBtn.addEventListener("click", () => {
+      const projectData = editProjectForm.formData;
+      Workspace.editProject(
+        projectId,
+        projectData.projectName,
+        projectData.projectDesc
+      );
+      refreshSideBar();
+      openedForm.formBtn = null;
+      openedForm.formType = "";
+    });
+    editProjectForm.cancelButton.addEventListener("click", () => {
+      editProjectForm.Body.remove();
+      openedForm.formBtn = null;
+      openedForm.formType = "";
+      projectBtn.classList.remove("selected-for-edit");
+    });
+    openedForm.formBtn = projectBtn;
+    openedForm.formType = "edit";
+    projectBtn.classList.add("selected-for-edit");
+  }
+}
+
+function showDeleteProjectForm(projectBtn) {
+  const form = document.querySelector("#projects-nav form");
+  if (openedForm.formBtn == projectBtn && openedForm.formType == "delete") {
+    form.remove();
+    openedForm.formBtn = null;
+    openedForm.formType = "";
+    projectBtn.classList.remove("selected-for-delete");
+  } else {
+    if (form) {
+      form.remove();
+      openedForm.formBtn.classList.remove("selected-for-edit");
+      openedForm.formBtn.classList.remove("selected-for-delete");
+    }
+
+    const deleteForm = new DeleteForm();
+    projectBtn.insertAdjacentElement("afterend", deleteForm.Body);
+    deleteForm.submitBtn.addEventListener("click", () => {
+      Workspace.deleteProject(projectBtn.getAttribute("data-project-id"));
+      refreshSideBar();
+      openedForm.formBtn = null;
+      openedForm.formType = "";
+    });
+    deleteForm.cancelButton.addEventListener("click", () => {
+      deleteForm.Body.remove();
+      openedForm.formBtn = null;
+      openedForm.formType = "";
+      projectBtn.classList.remove("selected-for-delete");
+    });
+
+    openedForm.formBtn = projectBtn;
+    openedForm.formType = "delete";
+    projectBtn.classList.add("selected-for-delete");
+  }
 }
 
 function showProject() {
@@ -92,6 +176,3 @@ function showProject() {
     this.getAttribute("data-project-id")
   );
 }
-
-function showEditProjectForm(projectBtn, e) {}
-function showDeleteProjectForm(projectBtn, e) {}

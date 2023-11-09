@@ -1,3 +1,4 @@
+import { ca } from "date-fns/locale";
 import {
   createElement,
   appendChildren,
@@ -75,6 +76,11 @@ export class ProjectForm extends Form {
       projectDesc: this.projectDescField.querySelector("textarea").value,
     };
   }
+
+  setFormValues(projectName, projectDesc) {
+    this.projectNameField.querySelector("input").value = projectName;
+    this.projectDescField.querySelector("textarea").value = projectDesc;
+  }
 }
 //#########################################################################################################
 class TaskForm extends Form {
@@ -92,18 +98,33 @@ class TaskForm extends Form {
     this.type = type;
   }
 }
-
-class Confirm extends Form {
-  constructor() {}
-}
 //#########################################################################################################
 
-class DeleteForm extends Form {
+export class DeleteForm extends Form {
+  alert;
   cancelButton;
   constructor() {
     super("Delete Project");
+    this.formBody.classList.add("delete-project-form");
+    this.alert = createElement("div", "confirm-alert");
+    this.alert.textContent = "All tasks inside project will be removed!";
     this.cancelButton = createElement("button", "cancel-button");
     this.cancelButton.textContent = "Cancel";
-    appendChildren(this.formBody, [this.cancelButton, this.submitBtn]);
+    appendChildren(this.formBody, [
+      this.alert,
+      this.cancelButton,
+      this.submitBtn,
+    ]);
+  }
+}
+//#########################################################################################################
+export class EditProjectForm extends ProjectForm {
+  cancelButton;
+  constructor() {
+    super("Save Project");
+    this.formBody.classList.add("edit-project-form");
+    this.cancelButton = createElement("button", "cancel-button");
+    this.cancelButton.textContent = "Cancel";
+    this.formBody.appendChild(this.cancelButton);
   }
 }
