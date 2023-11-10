@@ -1,4 +1,3 @@
-import { ca } from "date-fns/locale";
 import {
   createElement,
   appendChildren,
@@ -159,10 +158,13 @@ export class TaskForm extends Form {
 
   get formData() {
     return {
-      taskName: this.taskNameField.querySelector("input").value,
+      taskTitle: this.taskNameField.querySelector("input[type='text']").value,
       taskDesc: this.taskDescField.querySelector("textarea").value,
-      taskDueDate: this.taskDueDate.querySelector("input").value,
-      taskPriority: this.taskPriority.querySelector("textarea").value,
+      taskDueDate: new Date(
+        this.taskDueDate.querySelector("input[type='date']").value
+      ),
+      taskPriority: this.taskPriority.querySelector("input[type='checkbox']")
+        .checked,
     };
   }
 }
@@ -171,11 +173,9 @@ export class TaskForm extends Form {
 export class DeleteForm extends Form {
   alert;
   cancelButton;
-  constructor() {
-    super("Delete Project");
-    this.formBody.classList.add("delete-project-form");
+  constructor(action) {
+    super(action);
     this.alert = createElement("div", "confirm-alert");
-    this.alert.textContent = "All tasks inside project will be removed!";
     this.cancelButton = createElement("button", "cancel-button");
     this.cancelButton.textContent = "Cancel";
     appendChildren(this.formBody, [
@@ -183,6 +183,22 @@ export class DeleteForm extends Form {
       this.cancelButton,
       this.submitBtn,
     ]);
+  }
+}
+
+export class DeleteProjectForm extends DeleteForm {
+  constructor() {
+    super("Delete Project");
+    this.formBody.classList.add("delete-project-form");
+    this.alert.textContent = "All tasks inside project will be removed!";
+  }
+}
+
+export class DeleteTaskForm extends DeleteForm {
+  constructor() {
+    super("Delete Task");
+    this.formBody.classList.add("delete-task-form");
+    this.alert.textContent = "This task will be removed for forever";
   }
 }
 //#########################################################################################################

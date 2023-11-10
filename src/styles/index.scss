@@ -403,10 +403,11 @@ body {
     font-weight: 700;
   }
   .project-desc {
-    font-size: 1.2rem;
-    padding: 0.5rem;
+    line-height: 20px;
+    font-size: 1rem;
+    padding: 1rem;
     background-color: rgba($color: $dark, $alpha: 0.1);
-    border-radius: 10px;
+    border-radius: 5px;
     margin: 1rem;
   }
   .project-tasks {
@@ -414,8 +415,9 @@ body {
     display: flex;
     flex-flow: column nowrap;
     gap: 1rem;
+    border-top: 1px solid rgba($color: $mid, $alpha: 0.2);
     .project-tasks-header {
-      padding: 0.5rem;
+      padding: 0 0.5rem;
       display: grid;
       grid-template-columns: 200px minmax(300px, 25%);
       align-items: center;
@@ -432,34 +434,115 @@ body {
         button.opened {
           background-color: darken($color: $theme, $amount: 20%);
         }
-        .new-task-form {
-          transition: transform 0.2s ease;
-          transform: scaleY(0);
-          transform-origin: top;
-          z-index: 1;
-          width: 100%;
-          position: absolute;
-          top: 100%;
-          right: 0;
-          @extend %new-form;
-          border-radius: 10px;
-          border-top-left-radius: 0;
-          grid-template-columns: 1fr 1fr;
-          div,
-          button {
-            grid-column: 1 / -1;
-            &#task-due-date {
-              grid-column: 1 / 2;
-            }
-            &#task-priority {
-              grid-column: 2 / 3;
-            }
-          }
-        }
+
         button.pressed {
           @extend %pressed-button;
         }
       }
     }
   }
+}
+
+.new-task-form {
+  transition: transform 0.2s ease;
+  transform: scaleY(0);
+  transform-origin: top;
+  z-index: 1;
+  width: 100%;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  @extend %new-form;
+  border-radius: 10px;
+  border-top-left-radius: 0;
+  grid-template-columns: 1fr 1fr;
+  div,
+  button {
+    grid-column: 1 / -1;
+    &#task-due-date {
+      grid-column: 1 / 2;
+    }
+    &#task-priority {
+      grid-column: 2 / 3;
+    }
+  }
+}
+
+.project-tasks-list {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 0.5rem;
+  background-color: rgba($color: $dark, $alpha: 0.1);
+  border-radius: 5px;
+  padding: 0.5rem;
+  .tasks-header-row,
+  .tasks-row {
+    display: grid;
+    grid-template-columns: 50px 150px minmax(200px, 1fr) 100px 120px 50px 80px;
+    align-items: center;
+    justify-items: left;
+    * {
+      white-space: nowrap;
+    }
+  }
+  .tasks-header-row {
+    padding: 1rem;
+    justify-items: center;
+    > * {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+  }
+  .tasks-row {
+    padding: 0.3rem 1rem;
+    background-color: $theme;
+    color: $white;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    .task-title,
+    .task-desc {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: unset;
+    }
+    .task-title {
+      font-weight: 700;
+    }
+    .task-priority {
+      justify-self: center;
+    }
+    .task-priority-on {
+      font-variation-settings: "FILL" 1;
+      justify-self: center;
+    }
+    .check-done {
+      justify-self: center;
+      opacity: 0.8;
+      .check-mark-icon {
+        transform: translateY(2px);
+        cursor: pointer;
+        user-select: none;
+      }
+      input[type="checkbox"] {
+        display: none;
+      }
+      &:hover {
+        opacity: 1;
+      }
+    }
+    .task-actions {
+      justify-self: center;
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 0.5rem;
+    }
+  }
+}
+
+.edit-task-form {
+  @extend .new-task-form;
+  transform: none;
+  width: 300px;
+  transform: translateX(-300px);
+  border-radius: 10px;
 }

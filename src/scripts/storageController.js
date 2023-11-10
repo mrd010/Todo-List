@@ -1,7 +1,6 @@
 // storage functions
 //############################################################################################################################################################
 export function saveToStorage(projectsData) {
-  localStorage.clear();
   localStorage.setItem("projectsData", JSON.stringify(projectsData));
 }
 
@@ -10,3 +9,7 @@ export function loadFromStorage() {
 }
 
 //############################################################################################################################################################
+
+export function clear() {
+  localStorage.clear();
+}

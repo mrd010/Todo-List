@@ -28,7 +28,7 @@ class Task {
   constructor(title, description, dueDate, priority, id = generateID()) {
     this.title = title;
     this.description = description;
-    this.dueDate = dueDate;
+    this.dueDate = new Date(dueDate);
     this.priority = priority;
     this.id = id;
     this.done = false;
@@ -78,7 +78,7 @@ class Project {
     if (task.description != taskDesc) {
       task.description = taskDesc;
     }
-    if (task.dueDate != taskDueDate) {
+    if (!isEqual(task.dueDate, taskDueDate)) {
       task.dueDate = taskDueDate;
     }
     if (task.priority != taskPriority) {
@@ -129,16 +129,18 @@ class Project {
 const projects = [];
 
 export function loadWorkspace() {
+  // Storage.clear();
   const data = fetchWorkspace();
-  console.log(data);
-  data.forEach((projectData) =>
-    reCreateProject(
-      projectData.projectTitle,
-      projectData.projectDescription,
-      projectData.projectTasks,
-      projectData.projectId
-    )
-  );
+  if (data) {
+    data.forEach((projectData) =>
+      reCreateProject(
+        projectData.projectTitle,
+        projectData.projectDescription,
+        projectData.projectTasks,
+        projectData.projectId
+      )
+    );
+  }
 }
 
 export function createProject(title, desc) {
@@ -151,7 +153,7 @@ function reCreateProject(title, desc, tasks, id) {
   tasks.forEach((taskData) =>
     project.reCreateTask(
       taskData.taskTitle,
-      taskData.taskDesc,
+      taskData.taskDescription,
       taskData.taskDueDate,
       taskData.taskPriority,
       taskData.taskDone,
@@ -162,7 +164,13 @@ function reCreateProject(title, desc, tasks, id) {
   projects.push(project);
 }
 
-function createTask(projectId, taskTitle, taskDesc, taskDueDate, taskPriority) {
+export function createTask(
+  projectId,
+  taskTitle,
+  taskDesc,
+  taskDueDate,
+  taskPriority
+) {
   const newTask = new Task(taskTitle, taskDesc, taskDueDate, taskPriority);
   const project = projects.find((prj) => prj.id == projectId);
   if (project) {
@@ -178,7 +186,7 @@ export function editProject(projectId, title, desc) {
   saveWorkspace();
 }
 
-function editProjectTask(
+export function editProjectTask(
   projectId,
   taskId,
   taskTitle,
@@ -200,13 +208,13 @@ export function deleteProject(projectId) {
   saveWorkspace();
 }
 
-function deleteProjectTask(projectId, taskId) {
+export function deleteProjectTask(projectId, taskId) {
   const project = projects.find((prj) => prj.id == projectId);
   project.deleteTask(taskId);
   saveWorkspace();
 }
 
-function changeTaskDoneStatus(projectId, taskId, doneStatus) {
+export function changeTaskDoneStatus(projectId, taskId, doneStatus) {
   projects
     .find((prj) => prj.id == projectId)
     .changeTaskStatus(taskId, doneStatus);
